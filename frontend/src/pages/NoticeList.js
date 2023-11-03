@@ -128,18 +128,6 @@ function NoticeList() {
                                         게시판
                                     </button>
                                 </div>
-                                <div className="d-xxl-flex justify-content-xxl-end align-items-xxl-center"
-                                     style={{width: '70%', height: '100%'}}>
-                                    <input type="search"/>
-                                    <button className="btn btn-primary text-nowrap" type="button" style={{
-                                        background: 'url("img/Search.png") center / contain no-repeat',
-                                        borderStyle: 'none',
-                                        width: '54.3px',
-                                        height: '36px',
-                                        color: 'black'
-                                    }}>
-                                    </button>
-                                </div>
                             </div>
                             <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-end"
                                  style={{width: '100%', height: '50%'}}/>

@@ -62,11 +62,22 @@ public class EmpService {
     public EmpReshuffleResponse reshuffleResponse(Long id) {
         Emp emp = getEmpAccountId(id);
         EmpPicture picturePath = empPictureRepository.findByEmp_EmpId(emp.getEmpId());
-//        if (picturePath == null ) {
-//            picturePath = empPictureRepository.findByEmp_EmpId(99999L);
-//        }
-        picturePath = (picturePath != null) ? picturePath : empPictureRepository.findByEmp_EmpId(99999L);
-        return EmpReshuffleResponse.builder().empId(emp.getEmpId()).deptId(emp.getDept().getDeptId()).empName(emp.getEmpName()).deptName(emp.getDept().getDeptName()).empEmail(emp.getEmpEmail()).empPosition(emp.getEmpPosition()).empStartDate(emp.getEmpStartDate()).empEndDate(emp.getEmpEndDate()).empStatus(emp.getEmpStatus()).empPicturePath(picturePath.getUploadFile().getPath()).build();
+//        picturePath = (picturePath != null) ? picturePath : empPictureRepository.findByEmp_EmpId(99999L);
+        if (picturePath == null ) {
+            picturePath = empPictureRepository.findByEmp_EmpId(99999L);
+        }
+        return EmpReshuffleResponse.builder()
+                .empId(emp.getEmpId())
+                .deptId(emp.getDept().getDeptId())
+                .empName(emp.getEmpName())
+                .deptName(emp.getDept().getDeptName())
+                .empEmail(emp.getEmpEmail())
+                .empPosition(emp.getEmpPosition())
+                .empStartDate(emp.getEmpStartDate())
+                .empEndDate(emp.getEmpEndDate())
+                .empStatus(emp.getEmpStatus())
+                .empPicturePath(picturePath.getUploadFile().getPath())
+                .build();
     }
 
     @Transactional // 인사이동 업데이트
@@ -140,7 +151,6 @@ public class EmpService {
         if (empPicture == null) {
             empPicture = empPictureRepository.findByEmp_EmpId(99999L);
         }
-        System.out.println(empPicture.getUploadFile().getPath());
         String empPicturePathLoad = empPicture.getUploadFile().getPath();
 
         return EmpDetailResponse.builder()

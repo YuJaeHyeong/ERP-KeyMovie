@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static erp.backend.global.util.ArrayUtils.isNullOrEmpty;
 import static erp.backend.global.util.FileUtils.generatorFilePath;
@@ -44,12 +45,26 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardListResult boardListResult(Pageable pageable) {
         List<Board> list = boardRepository.findAll(Sort.by(Sort.Order.desc("boardId")));
-        List<BoardListResponse> boardListResponses = new ArrayList<>();
 
-        for (Board board : list) {
-            BoardListResponse response = BoardListResponse.fromBoard(board);
-            boardListResponses.add(response);
-        }
+        List<BoardListResponse> boardListResponses = list.stream()
+                .map(BoardListResponse::fromBoard)
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), boardListResponses.size());
+        List<BoardListResponse> sublist = boardListResponses.subList(start, end);
+
+        Page<BoardListResponse> page = new PageImpl<>(sublist, pageable, boardListResponses.size());
+
+        return new BoardListResult(pageable.getPageNumber(), boardListResponses.size(), pageable.getPageSize(), page);
+    }
+
+    @Transactional
+    public BoardListResult boardSearchListResult(String subject, Pageable pageable) {
+        List<Board> list = boardRepository.findByBoardSubjectContainingOrderByBoardIdDesc(subject);
+        List<BoardListResponse> boardListResponses = list.stream()
+                .map(BoardListResponse::fromBoard)
+                .toList();
 
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), boardListResponses.size());

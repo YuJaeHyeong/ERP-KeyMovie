@@ -10,6 +10,15 @@ export const fetchBoardList = async (page) => {
     }
 };
 
+export const fetchBoardSearchList = async (keyword, page) => {
+    try {
+        const response = await axios.get(`/api/board/search?keyword=${keyword}&page=${page}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const boardInsert = async (formData) => {
     try {
         const response = await axios.post('/api/board', formData, {

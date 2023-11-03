@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../assets/bootstrap/css/bootstrap.min.css';
 import '../assets/css/animate.min.css';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {fetchBoardList} from '../api/Board';
+import {fetchBoardList, fetchBoardSearchList} from '../api/Board';
 import {FormatDate} from "../component/FormatDate";
 import PaginationButtons from '../component/PaginationButton';
 
@@ -50,6 +50,18 @@ function BoardList() {
     const handleItemClick = (id) => {
         navigate(`/board/${id}`)
     }
+
+    const [searchKeyword, setSearchKeyword] = useState('');
+
+    const handleSearch = async () => {
+        try {
+            const data = await fetchBoardSearchList(searchKeyword, currentPage - 1);
+            setBoardList(data.list.content);
+            setTotalPages(data.totalPageCount);
+        } catch (error) {
+            console.error('데이터 가져오기 오류:', error);
+        }
+    };
 
     useEffect(() => {
         const getWidth = () => {
@@ -131,8 +143,16 @@ function BoardList() {
                                 </div>
                                 <div className="d-xxl-flex justify-content-xxl-end align-items-xxl-center"
                                      style={{width: '70%', height: '100%'}}>
-                                    <input type="search"/>
-                                    <button className="btn btn-primary text-nowrap" type="button" style={{
+                                    <input type="search"
+                                           onChange={(e) => setSearchKeyword(e.target.value)}
+                                           onKeyUp={(e) => {
+                                               if (e.key === 'Enter') {
+                                                   handleSearch();
+                                               }
+                                           }}
+                                           placeholder='제목으로 검색'
+                                    />
+                                    <button onClick={handleSearch} className="btn btn-primary text-nowrap" type="button" style={{
                                         background: 'url("img/Search.png") center / contain no-repeat',
                                         borderStyle: 'none',
                                         width: '54.3px',

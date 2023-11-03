@@ -83,7 +83,7 @@ function Reshuffle() {
                         height: '200px',
                         borderWidth: '1px',
                         borderStyle: 'solid',
-                        background: `url(${detail.empPicturePath}) center / contain no-repeat`
+                        background: `url(../${detail.empPicturePath}) center / contain no-repeat`
                     }}/></div>
                 </div>
                 <form onSubmit={handleSubmit(onValid)}>

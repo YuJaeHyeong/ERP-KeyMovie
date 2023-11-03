@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const selectHrmListApi = async (params) => {
     try {
-      const response = await axios.get('api/emp/hrm-list');
+      const response = await axios.get('/api/emp/hrm-list');
       return response.data;
     } catch (error) {
       throw error;

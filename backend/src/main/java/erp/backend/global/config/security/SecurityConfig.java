@@ -68,6 +68,7 @@ public class SecurityConfig {
                                 "/api/notice/first-list",
                                 "/api/board",
                                 "/api/board/{id}",
+                                "/api/board/search",
                                 "/api/comment/{boardId}",
                                 "/api/comment/{id}",
                                 "/api/approval",
