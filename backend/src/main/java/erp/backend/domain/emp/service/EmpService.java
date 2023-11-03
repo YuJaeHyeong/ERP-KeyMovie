@@ -55,17 +55,24 @@ public class EmpService {
     public List<EmpHrmListResponse> searchAllList() {
         List<Emp> list = empRepository.findAll();
 
-        return list.stream().map(emp -> EmpHrmListResponse.builder().empId(emp.getEmpId()).empName(emp.getEmpName()).empPosition(emp.getEmpPosition()).empEmail(emp.getEmpEmail()).empStatus(emp.getEmpStatus()).dept(emp.getDept().getDeptName()).build()).toList();
+        return list.stream()
+                .map(emp -> EmpHrmListResponse.builder()
+                        .empId(emp.getEmpId())
+                        .empName(emp.getEmpName())
+                        .empPosition(emp.getEmpPosition())
+                        .empEmail(emp.getEmpEmail())
+                        .empStatus(emp.getEmpStatus())
+                        .dept(emp.getDept().getDeptName())
+                        .build())
+                .toList();
     }
 
     @Transactional(readOnly = true) // 인사이동 페이지
     public EmpReshuffleResponse reshuffleResponse(Long id) {
         Emp emp = getEmpAccountId(id);
         EmpPicture picturePath = empPictureRepository.findByEmp_EmpId(emp.getEmpId());
-//        picturePath = (picturePath != null) ? picturePath : empPictureRepository.findByEmp_EmpId(99999L);
-        if (picturePath == null ) {
-            picturePath = empPictureRepository.findByEmp_EmpId(99999L);
-        }
+        picturePath = (picturePath != null) ? picturePath : empPictureRepository.findByEmp_EmpId(99999L);
+
         return EmpReshuffleResponse.builder()
                 .empId(emp.getEmpId())
                 .deptId(emp.getDept().getDeptId())
@@ -84,6 +91,7 @@ public class EmpService {
     public Long updateReshuffle(Long id, EmpReshuffleRequest request) {
         Emp emp = getEmpAccountId(id);
         emp.updateReshuffle(request);
+
         return emp.getEmpId();
     }
 
@@ -107,6 +115,7 @@ public class EmpService {
                 .empStatus("재직")
                 .build();
         empRepository.save(emp);
+
         Vacation vacation = Vacation.builder()
                 .emp(emp)
                 .vacationTotalVacation(18)
@@ -130,8 +139,6 @@ public class EmpService {
         List<String> roles = Arrays.stream(emp.getRoles().split(",")).toList();
         String encode = URLEncoder.encode("Bearer ", StandardCharsets.UTF_8).replaceAll("\\+", "%20") + token;
         Cookie cookie = new Cookie("Authorization", encode);
-        // cookie.setHttpOnly(true);
-        // cookie.setSecure(true);
         cookie.setPath("/");
 
         httpResponse.addCookie(cookie);
@@ -139,8 +146,8 @@ public class EmpService {
                 .token(token)
                 .empId(emp.getEmpId())
                 .empName(emp.getEmpName())
-                .empEmail(emp.getEmpEmail())
-                .roles(roles)
+                .empEmail(emp.getEmpEmail()
+                ).roles(roles)
                 .build();
     }
 
@@ -148,9 +155,7 @@ public class EmpService {
     public EmpDetailResponse empDetailResponse() {
         Emp emp = SecurityHelper.getAccount();
         EmpPicture empPicture = empPictureRepository.findByEmp_EmpId(emp.getEmpId());
-        if (empPicture == null) {
-            empPicture = empPictureRepository.findByEmp_EmpId(99999L);
-        }
+        empPicture = (empPicture != null) ? empPicture : empPictureRepository.findByEmp_EmpId(99999L);
         String empPicturePathLoad = empPicture.getUploadFile().getPath();
 
         return EmpDetailResponse.builder()
@@ -181,6 +186,7 @@ public class EmpService {
         }
         return emp.getEmpId();
     }
+
     @Transactional
     public Long addressUpdate(EmpAddressRequest request) {
         Emp emp = SecurityHelper.getAccount();
@@ -188,6 +194,7 @@ public class EmpService {
         empRepository.save(emp);
         return emp.getEmpId();
     }
+
     @Transactional
     public Long detailAddressUpdate(EmpAddressRequest request) {
         Emp emp = SecurityHelper.getAccount();
@@ -226,7 +233,15 @@ public class EmpService {
     public List<EmpSalaryListResponse> getEmpList() {
         Emp emp = SecurityHelper.getAccount();
         List<Emp> list = empRepository.findAll();
-        return list.stream().map(emp1 -> EmpSalaryListResponse.builder().empId(emp1.getEmpId()).empName(emp1.getEmpName()).empPosition(emp1.getEmpPosition()).empAmount(emp1.getEmpAmount()).dept(emp1.getDept().getDeptName()).build()).toList();
+        return list.stream()
+                .map(emp1 -> EmpSalaryListResponse.builder()
+                        .empId(emp1.getEmpId())
+                        .empName(emp1.getEmpName())
+                        .empPosition(emp1.getEmpPosition())
+                        .empAmount(emp1.getEmpAmount())
+                        .dept(emp1.getDept().getDeptName())
+                        .build())
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -236,11 +251,14 @@ public class EmpService {
         if (empPicture == null) {
             empPicture = empPictureRepository.findByEmp_EmpId(99999L);
         }
-        return EmpMainResponse.builder().empName(emp.getEmpName()).empPosition(emp.getEmpPosition()).empPicturePath(empPicture.getUploadFile().getPath()).build();
+        return EmpMainResponse.builder()
+                .empName(emp.getEmpName())
+                .empPosition(emp.getEmpPosition())
+                .empPicturePath(empPicture.getUploadFile().getPath())
+                .build();
     }
 
     private Emp getEmpAccountId(Long id) {
-
         return empRepository.findByEmpId(id);
     }
 
