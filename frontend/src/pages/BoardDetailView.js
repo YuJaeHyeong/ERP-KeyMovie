@@ -248,7 +248,7 @@ function BoardDetail() {
                                       style={{fontSize: 20, fontWeight: "bold"}}>{content.writer}</span>
                             </div>
                             <div style={{fontSize: 14, marginLeft: "2%"}}>{FormatDate(content.boardCreatedDate)}</div>
-                            <div style={{fontSize: 14, marginLeft: "2%", marginRight: "1%"}}>
+                            <div style={{fontSize: 14, marginLeft: "2%", marginRight: "1%", whiteSpace: 'nowrap'}}>
                                 {content.boardModifiedDate ? FormatDate(content.boardModifiedDate) : null}
                             </div>
                             <div style={{
