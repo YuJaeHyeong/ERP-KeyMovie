@@ -14,6 +14,7 @@ import erp.backend.global.util.FileUtils;
 import erp.backend.global.util.SchemaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +40,19 @@ public class NoticeService {
 
     @Transactional(readOnly = true)
     public NoticeListResult noticeListResult(PageRequest pageRequest) {
-        return NoticeListResult.from(
-                noticeQueryDsl.noticeList(pageRequest)
-        );
+        Emp emp = SecurityHelper.getAccount();
+        boolean hasPermission = emp.getEmpPosition().equals("부장");
+
+        Page<Notice> noticeList = noticeQueryDsl.noticeList(pageRequest);
+
+        return NoticeListResult.builder()
+                .page(noticeList.getNumber() + 1)
+                .size(noticeList.getSize())
+                .totalCount(noticeList.getTotalElements())
+                .totalPageCount(noticeList.getTotalPages())
+                .list(noticeList.map(NoticeListResponse::fromNotice))
+                .hasPermission(hasPermission)
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -64,16 +75,18 @@ public class NoticeService {
     public Long noticeInsert(NoticeRequest request, List<MultipartFile> files) throws IOException {
         // 공지사항 entity 생성
         Emp emp = SecurityHelper.getAccount();
-        Notice entity = Notice.builder()
-                .emp(emp)
-                .noticeSubject(request.getSubject())
-                .noticeContent(request.getContent())
-                .build();
-        noticeRepository.save(entity);
+        if (emp.getEmpPosition().equals("부장")) {
+            Notice entity = Notice.builder()
+                    .emp(emp)
+                    .noticeSubject(request.getSubject())
+                    .noticeContent(request.getContent())
+                    .build();
+            noticeRepository.save(entity);
 
-        createNoticeFileList(entity, files);
+            createNoticeFileList(entity, files);
 
-        return entity.getNoticeId();
+            return entity.getNoticeId();
+        } else throw new IllegalArgumentException("권한이 없습니다.");
     }
 
     @Transactional(readOnly = true) // 읽기 전용
@@ -170,6 +183,5 @@ public class NoticeService {
         return noticeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 글은 존재하지 않는 데이터입니다."));
     }
-
 }
 

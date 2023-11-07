@@ -1,6 +1,5 @@
 package erp.backend.domain.notice.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import erp.backend.domain.notice.entity.Notice;
 import lombok.RequiredArgsConstructor;

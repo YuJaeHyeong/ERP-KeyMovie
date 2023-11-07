@@ -5,6 +5,7 @@ import erp.backend.domain.message.dto.MessageDetailResponse;
 import erp.backend.domain.message.dto.MessageListResponse;
 import erp.backend.domain.message.dto.MessageRequest;
 import erp.backend.domain.message.entity.Message;
+import erp.backend.domain.message.repository.MessageQueryDsl;
 import erp.backend.domain.message.repository.MessageRepository;
 import erp.backend.global.config.security.SecurityHelper;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final MessageEmitterService messageEmitterService;
+
+    private final MessageQueryDsl messageQueryDsl;
 
     public Long messageInsert(MessageRequest request) {
         //TODO: Transactional 뺌 알람은 못 받아도 메시지는 전송되어야 하니
@@ -43,7 +46,7 @@ public class MessageService {
     @Transactional(readOnly = true)
     public List<MessageListResponse> searchList() {
         Emp emp = SecurityHelper.getAccount();
-        List<Message> list = messageRepository.findByMessageReceiverEmpIdOrderByMessageIdDesc(emp.getEmpId());
+        List<Message> list = messageQueryDsl.messageList(emp.getEmpId());
 
         return list.stream()
                 .map(message -> MessageListResponse.builder()

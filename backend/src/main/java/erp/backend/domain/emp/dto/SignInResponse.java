@@ -16,5 +16,6 @@ public class SignInResponse {
     private Long empId;
     private String empName;
     private String empEmail;
+    private String hasPermission;
     private List<String> roles;
 }

@@ -22,7 +22,6 @@ import java.net.URLDecoder;
 @Component
 @RequiredArgsConstructor
 public class JwtSecurityFilter extends OncePerRequestFilter {
-
     private final JwtEnvironment jwtEnvironment;
     private final JwtProvider jwtProvider;
 

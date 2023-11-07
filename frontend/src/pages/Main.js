@@ -82,6 +82,10 @@ function Main() {
         }
     });
 
+    const navigateToUsedList = () => {
+        navigate('/used-list');
+    };
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -246,6 +250,14 @@ function Main() {
                                                         borderWidth: '0px',
                                                         marginTop: '10px'
                                                     }}/>
+                                                    <button className="btn btn-primary" data-bss-hover-animate="pulse"
+                                                            type="button" onClick={navigateToUsedList} style={{
+                                                        background: 'url("img/vacation.png") center / contain no-repeat',
+                                                        width: '100%',
+                                                        height: '10%',
+                                                        borderWidth: '0px',
+                                                        marginTop: '10px'
+                                                    }}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -321,7 +333,7 @@ function Main() {
                                             <button className="btn btn-primary" data-bss-hover-animate="pulse"
                                                     onClick={navigateToApproval} type="button"
                                                     style={{
-                                                        background: 'url("img/3.png") center / contain no-repeat, white',
+                                                        background: 'url("img/approval.png") center / contain no-repeat, white',
                                                         color: 'black',
                                                         marginLeft: '0px',
                                                         width: '70%',

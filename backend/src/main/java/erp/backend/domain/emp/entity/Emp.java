@@ -85,6 +85,7 @@ public class Emp implements UserDetails {
                 .toList();
     }
 
+
     @Override
     public String getUsername() {
         return this.empEmail;
@@ -117,7 +118,7 @@ public class Emp implements UserDetails {
     public void updateReshuffle(EmpReshuffleRequest request) {
         this.dept = request.getEmpDeptId();
         this.empPosition = request.getEmpPosition();
-        this.empEndDate = request.getEmpEndDate().plusDays(1);
+        this.empEndDate = request.getEmpEndDate();
         this.empStatus = request.getEmpStatus();
         this.roles = new EmpVo().type1(request.getEmpPosition());
     }
@@ -125,6 +126,7 @@ public class Emp implements UserDetails {
     public void updateAddress(EmpAddressRequest request) {
         this.empAddress = request.getEmpAddress();
     }
+
     public void updateAddressDetail(EmpAddressRequest request) {
         this.empDetailAddress = request.getEmpDetailAddress();
     }

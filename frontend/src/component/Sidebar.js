@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
-import { Sidebar, SubMenu, MenuItem, Menu } from 'react-pro-sidebar';
+import {Menu, MenuItem, Sidebar, SubMenu} from 'react-pro-sidebar';
 
 const DeptEmpTree = () => {
     const [deptName, setDeptName] = useState('');
@@ -27,16 +27,28 @@ const DeptEmpTree = () => {
     };
 
     return (
-        <div style={{ width: '10%' }}>
+        <div>
             <Sidebar>
                 <Menu>
-                    <SubMenu title="부서 목록" onClick={toggleSubMenu} style={{ color: 'black' }}>
+                    <SubMenu title="부서 목록" onClick={toggleSubMenu} style={{color: 'black'}}>
                         {open && (
                             <>
-                                <MenuItem onClick={() => handleDeptClick('인사부')} style={{ color: 'black' }}>인 사 부</MenuItem>
-                                <MenuItem onClick={() => handleDeptClick('재무부')} style={{ color: 'black' }}>재 무 부</MenuItem>
-                                <MenuItem onClick={() => handleDeptClick('콘텐츠관리부')} style={{ color: 'black' }}>콘텐츠관리부</MenuItem>
-                                <MenuItem onClick={() => handleDeptClick('회원관리부')} style={{ color: 'black' }}>회원관리부</MenuItem>
+                                <MenuItem onClick={() => handleDeptClick('인사부')}
+                                          style={{color: 'black'}}>
+                                    인 사 부
+                                </MenuItem>
+                                <MenuItem onClick={() => handleDeptClick('재무부')}
+                                          style={{color: 'black'}}>
+                                    재 무 부
+                                </MenuItem>
+                                <MenuItem onClick={() => handleDeptClick('콘텐츠관리부')}
+                                          style={{color: 'black'}}>
+                                    콘텐츠관리부
+                                </MenuItem>
+                                <MenuItem onClick={() => handleDeptClick('회원관리부')}
+                                          style={{color: 'black'}}>
+                                    회원관리부
+                                </MenuItem>
                             </>
                         )}
                     </SubMenu>

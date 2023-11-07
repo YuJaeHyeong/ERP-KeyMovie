@@ -1,6 +1,5 @@
 package erp.backend.domain.notice.dto;
 
-import erp.backend.domain.notice.entity.Notice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,16 +16,5 @@ public class NoticeListResult {
     private int size;
     private long totalCount;
     private long totalPageCount;
-
-    public static NoticeListResult from(Page<Notice> noticeList) {
-        return NoticeListResult.builder()
-                .page(noticeList.getNumber() + 1)
-                .size(noticeList.getSize())
-                .totalCount(noticeList.getTotalElements())
-                .totalPageCount(noticeList.getTotalPages())
-                .list(
-                        noticeList.map(NoticeListResponse::fromNotice)
-                )
-                .build();
-    }
+    private boolean hasPermission;
 }

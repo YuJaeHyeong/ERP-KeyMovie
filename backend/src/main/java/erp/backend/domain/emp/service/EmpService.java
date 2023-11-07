@@ -76,7 +76,7 @@ public class EmpService {
     public EmpReshuffleResponse reshuffleResponse(Long id) {
         Emp emp = getEmpAccountId(id);
         EmpPicture picturePath = empPictureRepository.findByEmp_EmpId(emp.getEmpId());
-        picturePath = (picturePath != null) ? picturePath : empPictureRepository.findByEmp_EmpId(99999L);
+        picturePath = (picturePath != null) ? picturePath : empPictureRepository.findByEmp_EmpId(101L);
 
         return EmpReshuffleResponse.builder()
                 .empId(emp.getEmpId())
@@ -121,6 +121,7 @@ public class EmpService {
                 .build();
         empRepository.save(emp);
 
+
         Vacation vacation = Vacation.builder()
                 .emp(emp)
                 .vacationTotalVacation(18)
@@ -153,12 +154,14 @@ public class EmpService {
         cookie.setPath("/");
 
         httpResponse.addCookie(cookie);
+
         return SignInResponse.builder()
                 .token(token)
                 .empId(emp.getEmpId())
                 .empName(emp.getEmpName())
-                .empEmail(emp.getEmpEmail()
-                ).roles(roles)
+                .empEmail(emp.getEmpEmail())
+                .hasPermission(emp.getDept().getDeptName())
+                .roles(roles)
                 .build();
     }
 
@@ -166,7 +169,7 @@ public class EmpService {
     public EmpDetailResponse empDetailResponse() {
         Emp emp = SecurityHelper.getAccount();
         EmpPicture empPicture = empPictureRepository.findByEmp_EmpId(emp.getEmpId());
-        empPicture = (empPicture != null) ? empPicture : empPictureRepository.findByEmp_EmpId(99999L);
+        empPicture = (empPicture != null) ? empPicture : empPictureRepository.findByEmp_EmpId(101L);
         String empPicturePathLoad = empPicture.getUploadFile().getPath();
 
         return EmpDetailResponse.builder()
@@ -260,7 +263,7 @@ public class EmpService {
         Emp emp = SecurityHelper.getAccount();
         EmpPicture empPicture = empPictureRepository.findByEmp_EmpId(emp.getEmpId());
         if (empPicture == null) {
-            empPicture = empPictureRepository.findByEmp_EmpId(99999L);
+            empPicture = empPictureRepository.findByEmp_EmpId(101L);
         }
         return EmpMainResponse.builder()
                 .empName(emp.getEmpName())

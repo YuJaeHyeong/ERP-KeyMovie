@@ -62,7 +62,7 @@ function App() {
                     <Route path="/notice" element={<NoticeList/>}/>
                     <Route path="/notice/:id" element={<NoticeDetail/>}/>
                     <Route path="/notice-update/:id" element={<NoticeUpdate/>}/>
-                    <Route path="/hrm" element={<Hrm/>}/>
+                    <Route path="/hrm-list" element={<Hrm/>}/>
                     <Route path="/memo" element={<MemoComponent/>}/>
                     <Route path="/reshuffle/:id" element={<Reshuffle/>}/>
                     <Route path="/salary" element={<EmpSalaryList/>}/>

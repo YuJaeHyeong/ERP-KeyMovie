@@ -20,7 +20,7 @@ function Reshuffle() {
             .then((res) => {
                 if (res.status === 200) {
                     alert('인사이동 완료')
-                    return navigate('/hrm')
+                    return navigate('/hrm-list')
                 }
             })
             .catch((err) => {

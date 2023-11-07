@@ -151,13 +151,14 @@ function BoardList() {
                                            }}
                                            placeholder='제목으로 검색'
                                     />
-                                    <button onClick={handleSearch} className="btn btn-primary text-nowrap" type="button" style={{
-                                        background: 'url("img/Search.png") center / contain no-repeat',
-                                        borderStyle: 'none',
-                                        width: '54.3px',
-                                        height: '36px',
-                                        color: 'black'
-                                    }}>
+                                    <button onClick={handleSearch} className="btn btn-primary text-nowrap" type="button"
+                                            style={{
+                                                background: 'url("img/Search.png") center / contain no-repeat',
+                                                borderStyle: 'none',
+                                                width: '54.3px',
+                                                height: '36px',
+                                                color: 'black'
+                                            }}>
                                     </button>
                                 </div>
                             </div>
@@ -264,7 +265,6 @@ function BoardList() {
             <div className="d-flex justify-content-start"
                  style={{background: 'rgba(111,66,193,0)', height: '109px'}}>
                 <div style={{width: '42%', height: '100%'}}/>
-
                 { /* PaginationButtons 컴포넌트 사용 */}
                 <PaginationButtons
                     currentPage={currentPage}

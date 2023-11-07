@@ -1,6 +1,5 @@
 package erp.backend.global.config.queryDsl;
 
-
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
