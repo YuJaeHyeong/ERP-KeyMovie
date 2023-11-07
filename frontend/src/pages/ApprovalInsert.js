@@ -154,11 +154,11 @@ function ApprovalInsert() {
                                                 <span style={{
                                                     paddingRight: '0px',
                                                     paddingLeft: '12px',
-                                                    whiteSpace: 'nowrap'
+                                                    whiteSpace: "nowrap",
                                                 }}>결재자</span>
                                             </div>
                                             <select className="form-select"
-                                                    onChange={(e) => setCheckMan(e.target.value)}>
+                                                    onChange={(e) => setCheckMan(e.target.value)} autoFocus>
                                                 {list.map((e) => (
                                                     <option value={e.empId}>{e.empName}</option>
                                                 ))}

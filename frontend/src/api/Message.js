@@ -8,14 +8,7 @@ export const selectMessageListApi = async (params) => {
         throw error;
     }
 };
-export const selectHrmListApi = async (params) => {
-    try {
-      const response = await axios.get('/api/emp/hrm-list');
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-};
+
 export const selectEmpList = async (params) => {
     try {
         const response = await axios.get('/api/emp-list');
