@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../assets/bootstrap/css/bootstrap.min.css';
 import '../assets/css/animate.min.css';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {fetchBoardList, fetchBoardSearchList} from '../api/Board';
+import {fetchBoardSearchList} from '../api/Board';
 import {FormatDate} from "../component/FormatDate";
 import PaginationButtons from '../component/PaginationButton';
 
@@ -19,10 +19,9 @@ function BoardList() {
     };
 
     useEffect(() => {
-        // 데이터를 가져오는 비동기 함수를 정의
         const fetchData = async () => {
             try {
-                const data = await fetchBoardList(currentPage - 1);
+                const data = await fetchBoardSearchList(searchKeyword, currentPage - 1);
                 setBoardList(data.list.content);
                 setTotalPages(data.totalPageCount);
             } catch (error) {
@@ -205,7 +204,7 @@ function BoardList() {
                                 <div>
                                     {boardList.map((item) => (
                                         <button
-                                            className="list-group-item list-group-item-action d-flex flex-row align-items-start"
+                                            className="list-group-item list-group-item-action d-flex flex-row align-items-center"
                                             onClick={() => handleItemClick(item.id)} // 클릭 시 상세보기 페이지로 이동
                                             style={{
                                                 height: '50px',

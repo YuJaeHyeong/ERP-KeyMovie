@@ -5,6 +5,7 @@ import erp.backend.domain.notice.dto.*;
 import erp.backend.domain.notice.entity.Notice;
 import erp.backend.domain.notice.entity.NoticeFile;
 import erp.backend.domain.notice.repository.NoticeFileRepository;
+import erp.backend.domain.notice.repository.NoticeQueryDsl;
 import erp.backend.domain.notice.repository.NoticeRepository;
 import erp.backend.domain.uploadfile.entity.UploadFile;
 import erp.backend.domain.uploadfile.service.UploadFileService;
@@ -13,10 +14,7 @@ import erp.backend.global.util.FileUtils;
 import erp.backend.global.util.SchemaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,23 +35,13 @@ public class NoticeService {
 
     private final UploadFileService uploadFileService;
 
+    private final NoticeQueryDsl noticeQueryDsl;
+
     @Transactional(readOnly = true)
-    public NoticeListResult noticeListResult(Pageable pageable) {
-        List<NoticeListResponse> noticeListResponses = new ArrayList<>();
-        List<Notice> list = noticeRepository.findAll(Sort.by(Sort.Order.desc("noticeId")));
-
-        for (Notice notice : list) {
-            NoticeListResponse response = NoticeListResponse.fromNotice(notice);
-            noticeListResponses.add(response);
-        }
-
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), noticeListResponses.size());
-        List<NoticeListResponse> sublist = noticeListResponses.subList(start, end);
-
-        Page<NoticeListResponse> page = new PageImpl<>(sublist, pageable, noticeListResponses.size());
-
-        return new NoticeListResult(pageable.getPageNumber(), noticeListResponses.size(), pageable.getPageSize(), page);
+    public NoticeListResult noticeListResult(PageRequest pageRequest) {
+        return NoticeListResult.from(
+                noticeQueryDsl.noticeList(pageRequest)
+        );
     }
 
     @Transactional(readOnly = true)
@@ -64,10 +52,12 @@ public class NoticeService {
                 .map(notice -> NoticeMainListResponse.builder()
                         .id(notice.getNoticeId())
                         .subject(notice.getNoticeSubject())
+                        .views(notice.getNoticeViews())
+                        .writer(notice.getEmp().getEmpName())
+                        .createdDate(notice.getNoticeCreatedDate())
                         .build()
                 )
                 .toList();
-
     }
 
     @Transactional

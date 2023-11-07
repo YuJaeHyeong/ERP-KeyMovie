@@ -6,11 +6,8 @@ import erp.backend.domain.board.dto.BoardRequest;
 import erp.backend.domain.board.dto.BoardUpdate;
 import erp.backend.domain.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,25 +20,20 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    // 게시판 글 목록
+    // 게시판
     @GetMapping
-    public ResponseEntity<BoardListResult> boardList(@PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
-        BoardListResult listResult = boardService.boardListResult(pageable);
-        model.addAttribute("listResult", listResult);
-        return ResponseEntity.ok(listResult);
-    }
+    public ResponseEntity<BoardListResult> boardSearchList(@RequestParam(value = "size") int size,
+                                                           @RequestParam(value = "page") int page,
+                                                           @RequestParam(value = "keyword", required = false) String subject) {
 
-    // 게시판 제목으로 검색
-    @GetMapping("/search")
-    public ResponseEntity<BoardListResult> boardSearchList(@RequestParam(value = "keyword") String subject, @PageableDefault(size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
-        BoardListResult listResult = boardService.boardSearchListResult(subject, pageable);
-        model.addAttribute("listResult", listResult);
+        BoardListResult listResult = boardService.boardSearchListResult(subject, PageRequest.of(page, size));
         return ResponseEntity.ok(listResult);
     }
 
     // 게시판 글 작성
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Long> boardInsert(@RequestPart(value = "requestDto") BoardRequest request, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
+    public ResponseEntity<Long> boardInsert(@RequestPart(value = "requestDto") BoardRequest request,
+                                            @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
         return ResponseEntity.ok(boardService.boardInsert(request, files));
     }
 

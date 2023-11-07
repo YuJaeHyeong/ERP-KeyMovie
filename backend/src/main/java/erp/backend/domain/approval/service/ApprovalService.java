@@ -165,7 +165,7 @@ public class ApprovalService {
         Approval entity = approvalRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 데이터 입니다"));
         if (entity.getApprovalCheckMan().equals(emp.getEmpName())) {
-            System.out.println("#####"+entity.getApprovalCheckMan());
+            System.out.println("#####" + entity.getApprovalCheckMan());
             System.out.println(emp.getEmpName());
             return entity;
         } else {

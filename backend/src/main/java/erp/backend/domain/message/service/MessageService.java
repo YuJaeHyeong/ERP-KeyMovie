@@ -1,7 +1,9 @@
 package erp.backend.domain.message.service;
 
 import erp.backend.domain.emp.entity.Emp;
-import erp.backend.domain.message.dto.*;
+import erp.backend.domain.message.dto.MessageDetailResponse;
+import erp.backend.domain.message.dto.MessageListResponse;
+import erp.backend.domain.message.dto.MessageRequest;
 import erp.backend.domain.message.entity.Message;
 import erp.backend.domain.message.repository.MessageRepository;
 import erp.backend.global.config.security.SecurityHelper;
@@ -11,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class MessageService {
     private final MessageEmitterService messageEmitterService;
 
     public Long messageInsert(MessageRequest request) {
-        //Transactional 뺌 알람은 못 받아도 메시지는 전송되어야 하니
+        //TODO: Transactional 뺌 알람은 못 받아도 메시지는 전송되어야 하니
         //401 에러가 떠도 메시지는 db에 등록됨.
         Emp emp = SecurityHelper.getAccount();
         Message entity = Message.builder()
@@ -69,12 +70,12 @@ public class MessageService {
                 .messageSendTime(entity.getMessageSendTime())
                 .build();
     }
+
     @Transactional
     public void update(Long id) {
         Message entity = getMessage(id);
         entity.update();
     }
-
 
     private Message getMessage(Long id) {
         return messageRepository.findByMessageId(id);

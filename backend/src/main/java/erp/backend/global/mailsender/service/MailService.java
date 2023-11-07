@@ -13,7 +13,6 @@ import java.io.UnsupportedEncodingException;
 @RequiredArgsConstructor
 @Service
 public class MailService implements MailServiceImpl {
-
     private final JavaMailSender emailSender;
 
     @Override

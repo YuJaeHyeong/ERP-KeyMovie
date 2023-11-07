@@ -171,7 +171,7 @@ function NoticeList() {
                                 <div>
                                     {noticeList.map((item) => (
                                         <button
-                                            className="list-group-item list-group-item-action d-flex flex-row align-items-start"
+                                            className="list-group-item list-group-item-action d-flex flex-row align-items-center"
                                             onClick={() => handleItemClick(item.id)} // 클릭 시 상세보기 페이지로 이동
                                             style={{
                                                 height: '50px',

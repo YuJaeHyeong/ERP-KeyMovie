@@ -1,6 +1,8 @@
 package erp.backend.domain.notice.dto;
 
+import erp.backend.domain.notice.entity.Notice;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Page;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class NoticeListResult {
     private Page<NoticeListResponse> list;
     private int page;
@@ -15,18 +18,15 @@ public class NoticeListResult {
     private long totalCount;
     private long totalPageCount;
 
-    public NoticeListResult(int page, long totalCount, int size, Page<NoticeListResponse> list) {
-        this.page = page;
-        this.totalCount = totalCount;
-        this.size = size;
-        this.list = list;
-        this.totalPageCount = calTotalPageCount();
-    }
-
-    private long calTotalPageCount() {
-        long tpc = totalCount / size;
-        if (totalCount % size != 0)
-            tpc++;
-        return tpc;
+    public static NoticeListResult from(Page<Notice> noticeList) {
+        return NoticeListResult.builder()
+                .page(noticeList.getNumber() + 1)
+                .size(noticeList.getSize())
+                .totalCount(noticeList.getTotalElements())
+                .totalPageCount(noticeList.getTotalPages())
+                .list(
+                        noticeList.map(NoticeListResponse::fromNotice)
+                )
+                .build();
     }
 }

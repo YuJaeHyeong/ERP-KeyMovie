@@ -38,7 +38,6 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
         }
 
         switch (request.getRequestURI()) {
-            case "/login" -> log.debug("login");
             case "/api/sign-up" -> log.debug("가입");
             case "/api/sign-in" -> log.debug("로그인");
             case "/api/sign-out" -> log.debug("로그아웃");

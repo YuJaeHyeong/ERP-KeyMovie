@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignInResponse {
-
     private String token;
     private Long empId;
     private String empName;

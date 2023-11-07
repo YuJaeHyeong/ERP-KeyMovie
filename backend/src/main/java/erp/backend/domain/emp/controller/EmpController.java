@@ -3,7 +3,6 @@ package erp.backend.domain.emp.controller;
 import erp.backend.domain.emp.dto.*;
 import erp.backend.domain.emp.entity.EmpPicture;
 import erp.backend.domain.emp.service.EmpService;
-import erp.backend.domain.vacation.entity.Vacation;
 import erp.backend.domain.vacation.service.VacationService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,10 +44,12 @@ public class EmpController {
     public ResponseEntity<Long> fixInfoPasswordUpdate(@RequestBody EmpPasswordUpdateRequest request) throws MessagingException, UnsupportedEncodingException {
         return ResponseEntity.ok(empService.passwordUpdate(request));
     }
+
     @PutMapping("/emp/fix-address")
     public ResponseEntity<Long> fixAddress(@RequestBody EmpAddressRequest request) {
         return ResponseEntity.ok(empService.addressUpdate(request));
     }
+
     @PutMapping("/emp/fix-detail-address")
     public ResponseEntity<Long> fixDetailAddress(@RequestBody EmpAddressRequest request) {
         return ResponseEntity.ok(empService.detailAddressUpdate(request));
@@ -66,7 +67,6 @@ public class EmpController {
 
     @GetMapping("/emp/hrm-list")//인사관리 리스트
     public ResponseEntity<List<EmpHrmListResponse>> hrmList() {
-
         return ResponseEntity.ok(empService.searchAllList());
     }
 
@@ -77,7 +77,8 @@ public class EmpController {
     }
 
     @PutMapping("/emp/hrm/{id}")
-    public ResponseEntity<Long> updateReshuffle(@PathVariable("id") Long id, @RequestBody EmpReshuffleRequest request) {
+    public ResponseEntity<Long> updateReshuffle(@PathVariable("id") Long id,
+                                                @RequestBody EmpReshuffleRequest request) {
         return ResponseEntity.ok(empService.updateReshuffle(id, request));
     }
 
@@ -86,4 +87,8 @@ public class EmpController {
         return ResponseEntity.ok(empService.empMainResponse());
     }
 
+    @GetMapping("/emp/tree")
+    public ResponseEntity<DeptEmpList> empTreeList(@RequestParam(value = "deptName", required = false) String deptName) {
+        return ResponseEntity.ok(empService.empTreeList(deptName));
+    }
 }

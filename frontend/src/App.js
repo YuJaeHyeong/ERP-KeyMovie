@@ -45,7 +45,6 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
 
                 <Route element={<PrivateRoute/>}>
-                    <Route path="/" element={<Login/>}/>
                     <Route path="/main" element={<Main/>}/>
                     <Route path="/approval-insert" element={<ApprovalInsert/>}/>
                     <Route path="/approval-list" element={<ApprovalList/>}/>

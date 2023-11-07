@@ -203,7 +203,7 @@ function BoardDetail() {
             </div>
 
             {/* 게시글 내용 부분 */}
-            <div style={{width: "75%", height: "100%"}}>
+            <div style={{whiteSpace: 'nowrap', width: "75%", height: "100%"}}>
                 <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center" style={{
                     marginTop: "1%",
                     background: "rgba(13,110,253,0)",

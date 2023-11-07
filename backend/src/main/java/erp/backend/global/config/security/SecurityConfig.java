@@ -60,6 +60,7 @@ public class SecurityConfig {
                                 "/api/emp/picture-update",
                                 "/api/emp/salary-list",
                                 "/api/emp/salary/{empName}",
+                                "/api/emp/tree",
                                 "/api/salary",
                                 "/api/salary/list/{id}",
                                 "/api/main",

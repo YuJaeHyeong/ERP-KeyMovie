@@ -24,7 +24,6 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Emp implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EMP_ID")

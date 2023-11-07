@@ -1,11 +1,14 @@
 package erp.backend.domain.emp.service;
 
+import erp.backend.domain.dept.repository.DeptQueryDsl;
 import erp.backend.domain.emp.dto.*;
 import erp.backend.domain.emp.entity.Emp;
 import erp.backend.domain.emp.entity.EmpPicture;
 import erp.backend.domain.emp.repository.EmpPictureRepository;
 import erp.backend.domain.emp.repository.EmpRepository;
 import erp.backend.domain.emp.vo.EmpVo;
+import erp.backend.domain.memo.entity.Memo;
+import erp.backend.domain.memo.repository.MemoRepository;
 import erp.backend.domain.uploadfile.entity.UploadFile;
 import erp.backend.domain.uploadfile.repository.UploadFileRepository;
 import erp.backend.domain.uploadfile.service.UploadFileService;
@@ -43,6 +46,8 @@ public class EmpService {
     private final EmpPictureRepository empPictureRepository;
     private final UploadFileRepository uploadFileRepository;
     private final VacationRepository vacationRepository;
+    private final MemoRepository memoRepository;
+    private final DeptQueryDsl deptQueryDsl;
 
     private final UploadFileService uploadFileService;
 
@@ -124,6 +129,13 @@ public class EmpService {
                 .vacationUsedDayOff(0)
                 .build();
         vacationRepository.save(vacation);
+
+        Memo memo = Memo.builder()
+                .emp(emp)
+                .memoContent(" ")
+                .build();
+
+        memoRepository.save(memo);
     }
 
     @Transactional(readOnly = true)
@@ -253,9 +265,18 @@ public class EmpService {
         }
         return EmpMainResponse.builder()
                 .empName(emp.getEmpName())
+                .empDept(emp.getDept().getDeptName())
+                .empEmail(emp.getEmpEmail())
+                .empPhoneNumber(emp.getEmpPhoneNumber())
                 .empPosition(emp.getEmpPosition())
                 .empPicturePath(empPicture.getUploadFile().getPath())
                 .build();
+    }
+
+    // 조직도
+    @Transactional(readOnly = true)
+    public DeptEmpList empTreeList(String deptName) {
+        return deptQueryDsl.getDeptAndEmp(deptName);
     }
 
     private Emp getEmpAccountId(Long id) {
