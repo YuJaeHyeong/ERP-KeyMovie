@@ -33,7 +33,8 @@ import BoardUpdate from "./pages/BoardUpdate";
 import NoticeUpdate from "./pages/NoticeUpdate";
 import MessageDetail from "./component/MessageDetail";
 import MovieDetail from "./pages/MovieDetail";
-import VacationUpdateComponent from "./component/VacationUpdateComponent";
+import VacationInsertComponent from "./component/VacationInsertComponent";
+import UsedVacationList from "./pages/UsedVacationList";
 
 function App() {
 
@@ -76,7 +77,8 @@ function App() {
                     <Route path="/member/detail/:id" element={<MemberDetail/>}/>
                     <Route path="/serviceMovie" element={<ServiceMovieList/>}/>
                     <Route path="/movieDetail/:id" element={<MovieDetail/>}/>
-                    <Route path="/vacation/:id" element={<VacationUpdateComponent/>}/>
+                    <Route path="/vacation/:id" element={<VacationInsertComponent/>}/>
+                    <Route path="/used-list" element={<UsedVacationList/>}/>
                 </Route>
             </Routes>
         </Router>

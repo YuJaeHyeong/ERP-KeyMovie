@@ -47,7 +47,7 @@ function EmpSalaryList() {
         async function fetchData() {
             try {
                 const dept = "재무부";
-                if (dept === "재무부"){
+                if (dept === "재무부") {
                     const data = await selectEmpList();
                     setEmpList(data);
                 } else {
@@ -88,11 +88,11 @@ function EmpSalaryList() {
     return (
         <div style={{paddingTop: "50px",}}>
             <div>
-                <SalaryInsertComponent isOpen={isModalOpen} closeModal={closeModal} empId={selectedEmpId} />
+                <SalaryInsertComponent isOpen={isModalOpen} closeModal={closeModal} empId={selectedEmpId}/>
             </div>
 
             <div style={{background: 'rgba(111,66,193,0)', height: '100%', width: 'Auto'}}>
-                <div className="d-xxl-flex align-items-xxl-center" style={{
+                <div className="d-flex align-items-center" style={{
                     height: '70px',
                     paddingTop: '0px',
                     paddingRight: '0px',
@@ -109,7 +109,7 @@ function EmpSalaryList() {
                         width: '85%'
                     }}>급여관리</span>
                     <div style={{width: '15%', height: '100%'}}>
-                        <div className="d-xxl-flex align-items-xxl-center"
+                        <div className="d-flex align-items-center"
                              style={{height: '50%', width: '100%', background: 'rgba(214,51,132,0)'}}>
                             <input type="search" placeholder="이름 검색" onChange={handleSearchChange}
                                    style={{height: '81%', width: '85%'}}/>
@@ -122,21 +122,22 @@ function EmpSalaryList() {
                         </div>
                     </div>
                 </div>
-                <div className="d-xxl-flex" style={{width: 'auto', height: '100%'}}>
+                <div className="d-flex" style={{width: 'auto', height: '100%'}}>
                     <div style={{background: 'rgba(214,51,132,0)', height: '100%', width: '100%'}}>
-                        <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center" style={{
+                        <div className="d-flex justify-content-start align-items-center" style={{
                             background: 'rgba(13,110,253,0)',
                             height: '45px',
                             borderTop: '2px ridge rgba(128,128,128,0.32)',
                             borderBottom: '2px ridge rgba(128,128,128,0.32)',
                             width: '100%'
                         }}>
-                            <div className="d-xxl-flex justify-content-xxl-start"
-                                 style={{height: '100%', width: '150px'}}/>
-                            <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                 style={{height: '100%', width: '14%'}}><span>이름</span></div>
-                            <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                 style={{height: '100%', width: '15%'}}>
+                            <div className="d-flex justify-content-start" style={{height: '100%', width: '10%'}}/>
+                            <div className="d-flex justify-content-start align-items-center"
+                                 style={{height: '100%', width: '15%'}}><span>사번</span></div>
+                            <div className="d-flex justify-content-start align-items-center"
+                                 style={{height: '100%', width: '15%'}}><span>이름</span></div>
+                            <div className="d-flex justify-content-start align-items-center"
+                                 style={{height: '100%', width: '20%'}}>
                                 <select className="form-select" value={selectedDepartment}
                                         onChange={handleDepartmentChange} style={{width: '150px'}}>
                                     <option value="all">부서</option>
@@ -146,8 +147,8 @@ function EmpSalaryList() {
                                     <option value="회원관리부">회원관리부</option>
                                 </select>
                             </div>
-                            <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                 style={{height: '100%', width: '20%'}}>
+                            <div className="d-flex justify-content-start align-items-center"
+                                 style={{height: '100%', width: '18%'}}>
                                 <select className="form-select" value={selectedPosition} onChange={handlePositionChange}
                                         style={{width: '150px'}}>
                                     <option value="all">직급</option>
@@ -157,39 +158,35 @@ function EmpSalaryList() {
                                     <option value="부장">부장</option>
                                 </select>
                             </div>
-
-                            <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                 style={{height: '100%', width: '24%'}}><span>연봉</span></div>
-                            <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                 style={{height: '100%', width: '15%'}}><span>사번</span></div>
+                            <div className="d-flex justify-content-start align-items-center"
+                                 style={{height: '100%', width: '20%'}}><span>연봉</span></div>
                         </div>
                         <div style={{width: '100%', height: '20px'}}/>
 
                         <ul>
                             {filteredEmp.map((e, i) => (
                                 <li key={i} style={{listStyleType: 'none'}}>
-                                    <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                         style={{
-                                             background: 'rgba(13,110,253,0)',
-                                             height: '45px',
-                                             borderTop: '2px none rgba(128,128,128,0.32)',
-                                             borderBottom: '2px none rgba(128,128,128,0.32)',
-                                             width: '100%'
-                                         }}>
-                                        <div className="d-xxl-flex justify-content-xxl-start"
-                                             style={{height: '100%', width: '115px'}}/>
-                                        <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                             style={{height: '100%', width: '15%'}}><span>{e.empName}</span></div>
-                                        <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                             style={{height: '100%', width: '15%'}}><span>{e.dept}</span></div>
-                                        <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                             style={{height: '100%', width: '20%'}}><span>{e.empPosition}</span></div>
-                                        <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                             style={{height: '100%', width: '25%'}}><span>{e.empAmount}</span></div>
-                                        <div className="d-xxl-flex justify-content-xxl-start align-items-xxl-center"
-                                             style={{height: '100%', width: '5%'}}><span>{e.empId}</span></div>
+                                    <div className="d-flex justify-content-start align-items-center" style={{
+                                        background: 'rgba(13,110,253,0)',
+                                        height: '45px',
+                                        borderTop: '2px none rgba(128,128,128,0.32)',
+                                        borderBottom: '2px none rgba(128,128,128,0.32)',
+                                        width: '100%'
+                                    }}>
+                                        <div className="d-flex justify-content-start"
+                                             style={{height: '100%', width: '9.5%'}}/>
+                                        <div className="d-flex justify-content-start align-items-center"
+                                             style={{height: '100%', width: '16%'}}><span>{e.empId}</span></div>
+                                        <div className="d-flex justify-content-start align-items-center"
+                                             style={{height: '100%', width: '18%'}}><span>{e.empName}</span></div>
+                                        <div className="d-flex justify-content-start align-items-center"
+                                             style={{height: '100%', width: '22%'}}><span>{e.dept}</span></div>
+                                        <div className="d-flex justify-content-start align-items-center"
+                                             style={{height: '100%', width: '18%'}}><span>{e.empPosition}</span></div>
+                                        <div className="d-flex justify-content-start align-items-center"
+                                             style={{height: '100%', width: '15%'}}><span>{e.empAmount}</span></div>
                                         <button
-                                            className="btn btn-primary text-nowrap d-xxl-flex justify-content-xxl-center align-items-xxl-center"
+                                            className="btn btn-primary text-nowrap d-flex justify-content-center align-items-center"
                                             data-bss-hover-animate="pulse" type="button"
                                             onClick={() => navigateToDetail(e.empId)}
                                             style={{
@@ -208,9 +205,8 @@ function EmpSalaryList() {
                                             }}>
                                             급여 내역
                                         </button>
-
                                         <button
-                                            className="btn btn-primary text-nowrap d-xxl-flex justify-content-xxl-center align-items-xxl-center"
+                                            className="btn btn-primary text-nowrap d-flex justify-content-center align-items-center"
                                             data-bss-hover-animate="pulse"
                                             type="button"
                                             onClick={() => openModal(e.empId)}

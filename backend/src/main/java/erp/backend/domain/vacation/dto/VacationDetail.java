@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VacationDetail {
-    private int totalVacation;
-    private int usedVacation;
-    private int totalDayOff;
-    private int usedDayOff;
+    private int vacationTotalVacation;
+    private int vacationTotalDayOff;
+    private int vacationUsedCount;
 
 }
