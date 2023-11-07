@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import Editor from '../component/Editor';
 import {approvalInsert} from '../api/Approval';
 import {useNavigate} from 'react-router-dom';
-import {selectHrmListApi} from "../api/Message";
+import {selectEmpList} from "../api/Message";
 
 function ApprovalInsert() {
     const [subject, setSubject] = useState('');
@@ -17,7 +17,7 @@ function ApprovalInsert() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await selectHrmListApi();
+                const data = await selectEmpList();
                 setList(data);
             } catch (error) {
                 console.error('데이터 가져오기 오류:', error);
@@ -52,10 +52,10 @@ function ApprovalInsert() {
 
             try {
                 await approvalInsert(formData);
-                alert('게시물이 성공적으로 업로드되었습니다.');
-                navigate('/notice');
+                alert('결재 성공적으로 업로드되었습니다.');
+                navigate('/approval-list');
             } catch (error) {
-                alert('게시물이 업로드 실패.' + error.message);
+                alert('결재 업로드 실패.' + error.message);
             }
         }
     };
@@ -153,7 +153,8 @@ function ApprovalInsert() {
                                             <div className="d-flex justify-content-end" style={{width: '100%'}}>
                                                 <span style={{
                                                     paddingRight: '0px',
-                                                    paddingLeft: '12px'
+                                                    paddingLeft: '12px',
+                                                    whiteSpace: 'nowrap'
                                                 }}>결재자</span>
                                             </div>
                                             <select className="form-select"
