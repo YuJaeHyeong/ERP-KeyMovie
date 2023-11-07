@@ -79,12 +79,7 @@ public class Emp implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String role = roles + "_" + dept.getDeptName();
-
-        // 권한 초기화: ROLE_ADMIN_ -> ROLE_ADMIN, ROLE_USER_ -> ROLE_USER
-        role = role.startsWith("ROLE_ADMIN_") ? "ROLE_ADMIN" :
-                role.startsWith("ROLE_USER_") ? "ROLE_USER" : role;
-
+        String role = this.roles = roles + "_" + dept.getDeptName();
         return Arrays.stream(role.split(","))
                 .map(SimpleGrantedAuthority::new)
                 .toList();
@@ -117,6 +112,7 @@ public class Emp implements UserDetails {
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;
+        updateRoles();
     }
 
     public void updateReshuffle(EmpReshuffleRequest request) {
@@ -129,10 +125,17 @@ public class Emp implements UserDetails {
 
     public void updateAddress(EmpAddressRequest request) {
         this.empAddress = request.getEmpAddress();
+        updateRoles();
     }
 
     public void updateAddressDetail(EmpAddressRequest request) {
         this.empDetailAddress = request.getEmpDetailAddress();
+        updateRoles();
     }
 
+    private void updateRoles() {
+        roles = roles.startsWith("ROLE_ADMIN_") ? "ROLE_ADMIN" :
+                roles.startsWith("ROLE_USER_") ? "ROLE_USER" :
+                        roles;
+    }
 }
