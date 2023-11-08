@@ -1,67 +1,72 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import axios from 'axios';
+import {Menu, MenuItem, Sidebar, SubMenu} from 'react-pro-sidebar';
 
-function Sidebar() {
+const DeptEmpTree = () => {
+    const [deptName, setDeptName] = useState('');
+    const [employees, setEmployees] = useState([]);
+    const [open, setOpen] = useState(false);
 
+    const fetchEmployees = async (selectedDept) => {
+        try {
+            const response = await axios.get(`/api/emp/tree?deptName=${selectedDept}`);
+            setEmployees(response.data.employees);
+        } catch (error) {
+            console.error('Error fetching employees:', error);
+        }
+    };
+
+    const handleDeptClick = (selectedDept) => {
+        setDeptName(selectedDept);
+        fetchEmployees(selectedDept);
+        setOpen(true);
+    };
+
+    const toggleSubMenu = () => {
+        setOpen(!open);
+    };
 
     return (
-        <div
-            className="d-grid d-lg-flex justify-content-lg-center"
-            style={{ width: 'auto', height: '100%', minHeight: '0px', background: 'white' }}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-        >
-            <div
-                style={{ height: '100%', width: '10%', minHeight: '0px', background: 'white' }}
-            >
-                {sidebarVisible && (
-                    <div
-                        className="d-lg-flex justify-content-lg-center"
-                        style={{ height: '30px', background: 'rgba(126,126,126,0)' }}
-                    >
-                        <div
-                            className="d-lg-flex justify-content-lg-start justify-content-xxl-center"
-                            style={{ width: '170px', height: '35px', background: 'black' }}
-                        >
-                            <span style={{ fontSize: '17px', width: 'auto', color: 'white' }}>고객관리</span>
-                        </div>
+        <div>
+            <Sidebar>
+                <Menu>
+                    <SubMenu title="부서 목록" onClick={toggleSubMenu} style={{color: 'black'}}>
+                        {open && (
+                            <>
+                                <MenuItem onClick={() => handleDeptClick('인사부')}
+                                          style={{color: 'black'}}>
+                                    인 사 부
+                                </MenuItem>
+                                <MenuItem onClick={() => handleDeptClick('재무부')}
+                                          style={{color: 'black'}}>
+                                    재 무 부
+                                </MenuItem>
+                                <MenuItem onClick={() => handleDeptClick('콘텐츠관리부')}
+                                          style={{color: 'black'}}>
+                                    콘텐츠관리부
+                                </MenuItem>
+                                <MenuItem onClick={() => handleDeptClick('회원관리부')}
+                                          style={{color: 'black'}}>
+                                    회원관리부
+                                </MenuItem>
+                            </>
+                        )}
+                    </SubMenu>
+                </Menu>
+
+                {open && deptName && (
+                    <div style={{marginLeft: '50px'}}>
+                        <h3>{deptName}</h3>
+                        <ul>
+                            {employees.map(employee => (
+                                <li key={employee.empId}>{employee.empName}</li>
+                            ))}
+                        </ul>
                     </div>
                 )}
-                {sidebarVisible && (
-                    <button
-                        className="btn btn-primary text-center"
-                        type="button"
-                        style={{
-                            background: 'rgba(13,110,253,0)',
-                            borderStyle: 'none',
-                            width: '98.5px',
-                            fontSize: '13px',
-                            minWidth: '98.5px',
-                            color: 'black',
-                            paddingTop: '15px',
-                        }}
-                    >
-                        &nbsp; &nbsp;리스트
-                    </button>
-                )}
-                {sidebarVisible && (
-                    <button
-                        className="btn btn-primary text-center"
-                        type="button"
-                        style={{
-                            background: 'rgba(13,110,253,0)',
-                            borderStyle: 'none',
-                            width: '98.5px',
-                            fontSize: '13px',
-                            color: 'black',
-                            paddingTop: '0px',
-                        }}
-                    >
-                        등록
-                    </button>
-                )}
-            </div>
+            </Sidebar>
         </div>
     );
-}
+};
 
-export default Sidebar;
+export default DeptEmpTree;

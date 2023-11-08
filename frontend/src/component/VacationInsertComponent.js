@@ -1,64 +1,25 @@
 import React, {useEffect, useState} from "react";
 import Modal from "react-modal";
 import {useForm} from "react-hook-form";
-import {vacationDetail, vacationUpdate} from "../api/Vacation";
+import {vacationDetail, vacationInsert} from "../api/Vacation";
 import DatePicker from "react-datepicker";
 
 function calculateDayDifference(startDate1, endDate1) {
     if (startDate1 && endDate1) {
         const oneDay = 24 * 60 * 60 * 1000;
-        const differenceInDays = Math.round((endDate1 - startDate1) / oneDay);
+        const differenceInDays = Math.round((endDate1 - startDate1) / oneDay) + 1;
         return differenceInDays;
     }
     return 0;
 }
 
-function VacationUpdateComponent({isOpen, closeModal, empId}) {
+function VacationInsertComponent({isOpen, closeModal, empId}) {
     const {register, formState: {errors}, handleSubmit} = useForm();
     const [startdate1, setStartdate] = useState(null);
     const [enddate1, setEnddate] = useState(null);
-    const [usedDayOff, setUsedDayOff] = useState(0);
+    const [usedCount, setUsedCount] = useState(0);
     const [detail, setDetail] = useState({});
-
-
-    const onValid = async ({
-                               totalVacation,
-                               usedVacation,
-                               totalDayOff,
-                               usedDayOff,
-                               startDate,
-                               endDate,
-                               why,
-                           }) => {
-        const dayOffDifference = calculateDayDifference(startdate1, enddate1);
-        await vacationUpdate(empId, {
-            empId: empId,
-            totalVacation,
-            usedVacation,
-            totalDayOff,
-            usedDayOff: dayOffDifference,
-            startDate: startdate1,
-            endDate: enddate1,
-            why,
-        })
-            .then((res) => {
-                if (res.status === 200) {
-                    closeModal();
-                    console.log({totalVacation});
-                }
-            })
-            .catch((err) => {
-                console.log('err', err)
-            })
-    };
-
-    useEffect(() => {
-        if (startdate1 && enddate1) {
-            setUsedDayOff(calculateDayDifference(startdate1, enddate1));
-        } else {
-            setUsedDayOff(0);
-        }
-    }, [startdate1, enddate1]);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -66,11 +27,86 @@ function VacationUpdateComponent({isOpen, closeModal, empId}) {
                 const data = await vacationDetail(empId);
                 setDetail(data);
             } catch (error) {
-                console.log('error', error);
+                console.error('Error fetching data:', error);
             }
         };
+        const getWidth = () => {
+            return window.innerWidth;
+        };
+
+        setIsMobile(getWidth() < 768);
+
         fetchData();
     }, [empId]);
+
+
+    const onValid = async ({
+                               vacationTotalVacation,
+                               vacationTotalDayOff,
+                               vacationUsedCount,
+                               vacationStartDate,
+                               vacationEndDate,
+                               vacationWhy,
+                           }) => {
+        const startDate = new Date(startdate1);
+        const endDate = new Date(enddate1);
+
+        if (startDate > endDate) {
+            alert("날짜를 다시 입력하세요");
+            setUsedCount(null);
+            setStartdate(null);
+            setEnddate(null);
+        } else {
+            const dayOffDifference = calculateDayDifference(startdate1, enddate1);
+            const totalVacation = parseInt(detail.vacationTotalVacation, 10);
+            const totalDayOff = parseInt(detail.vacationTotalDayOff, 10);
+            let newTotalVacation = totalVacation - dayOffDifference;
+            let newTotalDayOff = totalDayOff - Math.max(0, dayOffDifference - totalVacation);
+
+            if (newTotalVacation < 0) {
+                newTotalVacation = 0;
+            }
+
+            if (dayOffDifference > totalVacation + totalDayOff) {
+                alert("사용일이 남은 휴가보다 많습니다.");
+                setUsedCount(null);
+                setStartdate(null);
+                setEnddate(null);
+            } else {
+                await vacationInsert({
+                    empId: empId,
+                    vacationTotalVacation: newTotalVacation,
+                    vacationUsedVacation: dayOffDifference,
+                    vacationTotalDayOff: newTotalDayOff,
+                    vacationUsedCount: dayOffDifference,
+                    vacationStartDate: startdate1,
+                    vacationEndDate: enddate1,
+                    vacationWhy,
+                })
+                    .then((res) => {
+                        if (res.status === 200) {
+                            closeModal();
+                            alert('휴가 등록 완료!');
+                            window.location.reload();
+                        }
+                    })
+                    .catch((err) => {
+                        alert('값을 모두 입력하세요');
+                        console.log('err', err);
+                    });
+            }
+        }
+    };
+
+
+    useEffect(() => {
+        if (startdate1 && enddate1) {
+            setUsedCount(calculateDayDifference(startdate1, enddate1));
+        } else {
+            setUsedCount(0);
+        }
+    }, [startdate1, enddate1]);
+
 
     const customModalStyles = {
         content: {
@@ -110,12 +146,12 @@ function VacationUpdateComponent({isOpen, closeModal, empId}) {
                             background: 'rgba(253,126,20,0)',
                             marginBottom: '20px'
                         }}>
-                            <span style={{fontSize: '22px', fontWeight: 'bold'}}>휴가 등록 {empId}</span>
+                            <span style={{fontSize: '22px', fontWeight: 'bold'}}>휴가 등록</span>
                         </div>
                         <div className="d-flex justify-content-end align-items-center"
                              style={{height: '100%', width: '63%'}}>
                             <button className="btn btn-primary" data-bss-hover-animate="pulse" type="button" style={{
-                                background: 'url("assets/img/icons8-취소하다-500.png") center / contain no-repeat',
+                                background: 'url("assets/img/취소.png") center / contain no-repeat',
                                 width: '38px',
                                 height: '37px',
                                 borderStyle: 'none'
@@ -150,41 +186,18 @@ function VacationUpdateComponent({isOpen, closeModal, empId}) {
                                         <div style={{background: 'rgba(111,66,193,0)', height: '2px', width: '100%'}}/>
                                         <div className="d-flex align-items-center"
                                              style={{background: 'rgba(111,66,193,0)', height: '40%', width: '100%'}}>
-                                            <input type="text" {...register('totalVacation')}
-                                                   value={detail.totalVacation}
-                                                   />
+                                            <input type="text"
+                                                   value={detail.vacationTotalVacation}
+                                                   readOnly/>
                                         </div>
                                     </div>
+                                    <div className="d-flex justify-content-start align-items-center"
+                                         style={{
+                                             background: 'rgba(102,16,242,0)',
+                                             width: '100%',
+                                             height: '10%',
+                                             marginTop: '10px',
 
-                                    <div className="d-flex justify-content-start align-items-center"
-                                         style={{
-                                             background: 'rgba(102,16,242,0)',
-                                             width: '100%',
-                                             height: '10%',
-                                             marginTop: '10px',
-                                             marginBottom: '10px'
-                                         }}>
-                                        <div className="d-flex justify-content-start align-items-center"
-                                             style={{
-                                                 background: 'rgba(111,66,193,0)',
-                                                 height: '50%',
-                                                 width: '100%',
-                                                 fontSize: '15px'
-                                             }}>
-                                            <span>사용 휴가</span>
-                                        </div>
-                                        <div style={{background: 'rgba(111,66,193,0)', height: '2px', width: '100%'}}/>
-                                        <div className="d-flex align-items-center"
-                                             style={{background: 'rgba(111,66,193,0)', height: '40%', width: '100%'}}>
-                                            <input type="text" {...register('usedVacation')} />
-                                        </div>
-                                    </div>
-                                    <div className="d-flex justify-content-start align-items-center"
-                                         style={{
-                                             background: 'rgba(102,16,242,0)',
-                                             width: '100%',
-                                             height: '10%',
-                                             marginTop: '10px',
                                              marginBottom: '10px'
                                          }}>
                                         <div className="d-flex justify-content-start align-items-center"
@@ -199,9 +212,9 @@ function VacationUpdateComponent({isOpen, closeModal, empId}) {
                                         <div style={{background: 'rgba(111,66,193,0)', height: '2px', width: '100%'}}/>
                                         <div className="d-flex align-items-center"
                                              style={{background: 'rgba(111,66,193,0)', height: '40%', width: '100%'}}>
-                                            <input type="text" name="totaldayoff" {...register('totalDayOff')}
-                                                   value={detail.totalDayOff}
-                                                   readOnly/>
+                                            <input type="text" name="totaldayoff" {...register('vacationTotalDayOff')}
+                                                   value={detail.vacationTotalDayOff}
+                                                   autoFocus/>
                                         </div>
                                     </div>
                                     <div className="d-flex justify-content-start align-items-center"
@@ -219,15 +232,15 @@ function VacationUpdateComponent({isOpen, closeModal, empId}) {
                                                  width: '100%',
                                                  fontSize: '15px'
                                              }}>
-                                            <span>사용 연차</span>
+                                            <span>사용일</span>
                                         </div>
                                         <div style={{background: 'rgba(111,66,193,0)', height: '2px', width: '100%'}}/>
                                         <div className="d-flex align-items-center"
                                              style={{background: 'rgba(111,66,193,0)', height: '40%', width: '100%'}}>
                                             <input
                                                 type="text"
-                                                name="useddayoff"
-                                                value={usedDayOff}
+                                                name="usedCount"
+                                                value={usedCount}
                                                 readOnly
                                             />
                                         </div>
@@ -311,7 +324,7 @@ function VacationUpdateComponent({isOpen, closeModal, empId}) {
                                         <div style={{background: 'rgba(111,66,193,0)', height: '2px', width: '100%'}}/>
                                         <div className="d-flex align-items-center"
                                              style={{background: 'rgba(111,66,193,0)', height: '40%', width: '100%'}}>
-                                            <input type="text" name="why" {...register('why')} />
+                                            <input type="text" name="why" {...register('vacationWhy')} />
                                         </div>
                                     </div>
                                     <div style={{width: '100%', height: '2%', background: 'rgba(214,51,132,0)'}}/>
@@ -343,4 +356,4 @@ function VacationUpdateComponent({isOpen, closeModal, empId}) {
     )
 }
 
-export default VacationUpdateComponent;
+export default VacationInsertComponent;

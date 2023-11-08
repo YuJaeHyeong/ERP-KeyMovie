@@ -33,7 +33,8 @@ import BoardUpdate from "./pages/BoardUpdate";
 import NoticeUpdate from "./pages/NoticeUpdate";
 import MessageDetail from "./component/MessageDetail";
 import MovieDetail from "./pages/MovieDetail";
-import VacationUpdateComponent from "./component/VacationUpdateComponent";
+import VacationInsertComponent from "./component/VacationInsertComponent";
+import UsedVacationList from "./pages/UsedVacationList";
 
 function App() {
 
@@ -45,7 +46,6 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
 
                 <Route element={<PrivateRoute/>}>
-                    <Route path="/" element={<Login/>}/>
                     <Route path="/main" element={<Main/>}/>
                     <Route path="/approval-insert" element={<ApprovalInsert/>}/>
                     <Route path="/approval-list" element={<ApprovalList/>}/>
@@ -62,7 +62,7 @@ function App() {
                     <Route path="/notice" element={<NoticeList/>}/>
                     <Route path="/notice/:id" element={<NoticeDetail/>}/>
                     <Route path="/notice-update/:id" element={<NoticeUpdate/>}/>
-                    <Route path="/hrm" element={<Hrm/>}/>
+                    <Route path="/hrm-list" element={<Hrm/>}/>
                     <Route path="/memo" element={<MemoComponent/>}/>
                     <Route path="/reshuffle/:id" element={<Reshuffle/>}/>
                     <Route path="/salary" element={<EmpSalaryList/>}/>
@@ -77,7 +77,8 @@ function App() {
                     <Route path="/member/detail/:id" element={<MemberDetail/>}/>
                     <Route path="/serviceMovie" element={<ServiceMovieList/>}/>
                     <Route path="/movieDetail/:id" element={<MovieDetail/>}/>
-                    <Route path="/vacation/:id" element={<VacationUpdateComponent/>}/>
+                    <Route path="/vacation/:id" element={<VacationInsertComponent/>}/>
+                    <Route path="/used-list" element={<UsedVacationList/>}/>
                 </Route>
             </Routes>
         </Router>

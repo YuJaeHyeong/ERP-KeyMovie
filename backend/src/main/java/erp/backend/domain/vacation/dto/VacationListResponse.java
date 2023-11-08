@@ -12,13 +12,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VacationListResponse {
-
     private Long vacationId;
-    private Long empId;
     private int vacationTotalVacation;
-    private int vacationUsedVacation;
     private int vacationTotalDayOff;
-    private int vacationUsedDayOff;
+    private int vacationUsedCount;
     private LocalDate vacationStartDate;
     private LocalDate vacationEndDate;
     private String vacationWhy;
